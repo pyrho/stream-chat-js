@@ -483,9 +483,6 @@ export class StreamChat<
       throw new Error('The "id" field on the user is missing');
     }
 
-    if (this.pendingDisconnect) await this.pendingDisconnect;
-    this.pendingDisconnect = null;
-
     /**
      * Calling connectUser multiple times is potentially the result of a  bad integration, however,
      * If the user id remains the same we don't throw error
@@ -513,14 +510,23 @@ export class StreamChat<
     this.userID = user.id;
     this.anonymous = false;
 
-    const setTokenPromise = this._setToken(user, userTokenOrProvider);
-    this._setUser(user);
+    const startConnecting = () => {
+      const setTokenPromise = this._setToken(user, userTokenOrProvider);
+      this._setUser(user);
 
-    const wsPromise = this.openConnection();
+      const wsPromise = this.openConnection();
 
-    this.setUserPromise = Promise.all([setTokenPromise, wsPromise]).then(
-      (result) => result[1], // We only return connection promise;
-    );
+      return Promise.all([setTokenPromise, wsPromise]).then(
+        (result) => result[1], // We only return connection promise;
+      );
+    };
+
+    this.setUserPromise = this.pendingDisconnect
+      ? this.pendingDisconnect.then(() => {
+          this.pendingDisconnect = null;
+          return startConnecting();
+        })
+      : startConnecting();
 
     try {
       return await this.setUserPromise;
