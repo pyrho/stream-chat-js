@@ -132,6 +132,7 @@ import {
   ExportUsersRequest,
   ExportUsersResponse,
   CreateImportResponse,
+  CreateImportOptions,
   CreateImportURLResponse,
   GetImportResponse,
   ListImportsResponse,
@@ -538,10 +539,10 @@ export class StreamChat<StreamChatGenerics extends ExtendableGenerics = DefaultG
   _setupConnection = this.openConnection;
 
   /**
-	 * updateAppSettings - updates application settings
-	 *
-	 * @param {AppSettings} options App settings.
-	 * 		IE: {
+   * updateAppSettings - updates application settings
+   *
+   * @param {AppSettings} options App settings.
+   * 		IE: {
 	  			"apn_config": {
 					"auth_type": "token",
 					"auth_key": fs.readFileSync(
@@ -561,7 +562,7 @@ export class StreamChat<StreamChatGenerics extends ExtendableGenerics = DefaultG
 				},
 				"webhook_url": "https://acme.com/my/awesome/webhook/"
 			}
-	 */
+   */
   async updateAppSettings(options: AppSettings) {
     if (options.apn_config?.p12_cert) {
       options.apn_config.p12_cert = Buffer.from(options.apn_config.p12_cert).toString('base64');
