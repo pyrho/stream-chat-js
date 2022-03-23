@@ -1,10 +1,10 @@
 {
-  "name": "stream-chat",
+  "name": "@pyrho/stream-chat",
   "version": "6.3.0",
   "description": "JS SDK for the Stream Chat API",
   "author": "GetStream",
   "homepage": "https://getstream.io/chat/",
-  "repository": "https://github.com/GetStream/stream-chat-js.git",
+  "repository": "git://github.com/pyrho/stream-chat-js.git",
   "main": "./dist/index.js",
   "module": "./dist/index.es.js",
   "jsnext:main": "./dist/index.es.js",
@@ -126,6 +126,9 @@
     "preversion": "yarn && yarn lint && yarn test-unit",
     "version": "git add yarn.lock",
     "postversion": "git push && git push --tags && npm publish"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "husky": {
     "hooks": {
